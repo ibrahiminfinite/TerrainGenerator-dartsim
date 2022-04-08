@@ -1,0 +1,3 @@
+[submodule "TerrainGenerator"]
+	path = TerrainGenerator
+	url = https://github.com/ibrahiminfinite/TerrainGenerator.git
