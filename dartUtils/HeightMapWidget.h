@@ -66,43 +66,70 @@ public:
         if (ImGui::CollapsingHeader("Terrain", ImGuiTreeNodeFlags_DefaultOpen))
         {
 
-            // Terrain roughness
-            if (ImGui::SliderFloat("Roughness", &config_.roughenss, 0.001, 0.05,"%.3f"))
+            if (ImGui::CollapsingHeader("Terrain Type"))
             {
-                updateHeightmapShape();
-            }
-
-            // Noise amplitude
-            if (ImGui::SliderFloat("Amplitude", &config_.amplitude, 0.2, 3.0,"%.3f"))
-            {
-                updateHeightmapShape();
-            }
-
-            // Noise frequency
-            if (ImGui::SliderFloat("Frequency", &config_.frequency, 0.2, 1.0,"%.3f"))
-            {
-                updateHeightmapShape();
+                if (ImGui::RadioButton("Plane", config_.terrainType == TerrainType::Plane))
+                {
+                    config_.terrainType = TerrainType::Plane;
+                    updateHeightmapShape();
+                }
+                if (ImGui::RadioButton("Steps",config_.terrainType == TerrainType::Steps))
+                {
+                    config_.terrainType = TerrainType::Steps;
+                    updateHeightmapShape();
+                }
+                if (ImGui::RadioButton("Hills", config_.terrainType == TerrainType::Hills))
+                {
+                    config_.terrainType = TerrainType::Hills;
+                    updateHeightmapShape();
+                }
             }
 
             // terrain width
-            if (ImGui::SliderFloat("xSize", &config_.xSize, 2, 10,"%.1f"))
-            {
+            if (ImGui::SliderFloat("xSize", &config_.xSize, 2, 10, "%.1f")) {
                 updateHeightmapShape();
             }
             // terrain depth
-            if (ImGui::SliderFloat("ySize", &config_.ySize, 2, 10,"%.1f"))
-            {
+            if (ImGui::SliderFloat("ySize", &config_.ySize, 2, 10, "%.1f")) {
                 updateHeightmapShape();
             }
             // Terrain width resolution
-            if (ImGui::SliderFloat("Resolution ", &config_.resolution, 0.001, 1.0, "%.3f"))
-            {
+            if (ImGui::SliderFloat("Resolution ", &config_.resolution, 0.001, 1.0, "%.3f")) {
                 updateHeightmapShape();
             }
-            // Terrain width resolution
-            if (ImGui::SliderInt( "Octaves ", &config_.numOctaves, 1, 10))
-            {
-                updateHeightmapShape();
+
+            if (ImGui::CollapsingHeader("Hills")) {
+                // Terrain roughness
+                if (ImGui::SliderFloat("Roughness", &config_.roughenss, 0.001, 0.05, "%.3f")) {
+                    updateHeightmapShape();
+                }
+
+                // Noise amplitude
+                if (ImGui::SliderFloat("Amplitude", &config_.amplitude, 0.2, 3.0, "%.3f")) {
+                    updateHeightmapShape();
+                }
+
+                // Noise frequency
+                if (ImGui::SliderFloat("Frequency", &config_.frequency, 0.2, 1.0, "%.3f")) {
+                    updateHeightmapShape();
+                }
+                // Terrain width resolution
+                if (ImGui::SliderInt("Octaves ", &config_.numOctaves, 1, 10)) {
+                    updateHeightmapShape();
+                }
+            }
+
+            if (ImGui::CollapsingHeader("Steps")) {
+                // Step Height
+                if (ImGui::SliderFloat("Height", &config_.stepHeight, 0.05, 0.3, "%.2f")) {
+                    updateHeightmapShape();
+                }
+
+                // Step Width
+                if (ImGui::SliderFloat("Width", &config_.stepWidth, 0.1, 0.5, "%.2f")) {
+                    updateHeightmapShape();
+                }
+
             }
         }
 
@@ -130,6 +157,11 @@ public:
 
     void updateHeightmapShape()
     {
+        if(config_.terrainType == TerrainType::Inavlid)
+        {
+            dterr << "Invalid Terrain Type"<< std::endl;
+        }
+
         mTerrain->setShape(createHeightmapShape<float>(generator_, config_));
 
         auto tf = mTerrain->getRelativeTransform();
@@ -140,6 +172,7 @@ public:
 
 protected:
 
+    int terrainType_;
     TerrainConfig& config_;
     TerrainGenerator& generator_;
     dynamics::SimpleFramePtr mTerrain;

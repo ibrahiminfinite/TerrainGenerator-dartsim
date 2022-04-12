@@ -1,7 +1,3 @@
-//
-// Created by mobile on 08/04/22.
-//
-
 #ifndef TERRAINGENERATOR_DART_HEIGHTMAPTERRAIN_H
 #define TERRAINGENERATOR_DART_HEIGHTMAPTERRAIN_H
 
@@ -15,6 +11,11 @@ template <typename S>
 dynamics::ShapePtr createHeightmapShape(TerrainGenerator& generator,
                                         TerrainConfig& config)
 {
+    if(config.terrainType == TerrainType::Inavlid)
+    {
+        dterr << "Invalid Terrain Type"<< std::endl;
+    }
+
     using Vector3 = Eigen::Matrix<S, 3, 1>;
 
     Terrain terrain = generator.generate(config);

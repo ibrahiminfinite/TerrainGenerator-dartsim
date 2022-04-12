@@ -42,13 +42,23 @@ int main() {
     TerrainGenerator generator;
     TerrainConfig config;
 
-    config.terrainType = TerrainType::Hills;
+    config.terrainType = TerrainType::Plane;
     config.xSize = config.ySize = 8.0;
+    config.resolution = 0.2;
+
+
+    // Hills
     config.resolution = 0.2;
     config.amplitude = 1.0;
     config.frequency = 0.2;
     config.roughenss = 0.001;
     config.numOctaves = 1;
+
+    // Steps
+    config.resolution = 0.02;
+    config.stepWidth = 0.2;
+    config.stepHeight = 0.1;
+
 
     auto world = dart::simulation::World::create();
     world->setGravity(Eigen::Vector3d::Zero());
